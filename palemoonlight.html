@@ -22,13 +22,13 @@
 		
 	</div>
 	<div id="button container">
-		<button type="attack" onclick="attack(player.condition, demon.condition)">Violence</button>
-		<button type="special" onclick="specialMove(demon.condition)">Special Move</button>
-		<button type="discuss" onclick="rationalDiscourse()">Rational Discourse</button>
-		<button type="insult" onclick="insultResults()">Insult</button>
+		<button type="attack" onclick="attack(player.condition, demon.condition)" value="Violence">
+		<button type="special" onclick="specialMove(demon.condition)" value="Special Move">
+		<button type="discuss" onclick="rationalDiscourse()" value="Rational Discourse">
+		<button type="insult" onclick="insultResults()" value="Insult">
 	</div>
 	<script>
-
+		//enemy and player objects
 		var demon = {
 			health: 50,
 			condition: "normal",
@@ -41,6 +41,8 @@
 			condition: "normal",
 			insultReady: true
 		}
+
+		//special move rewards or punishes the player for taking advantage of the demon's condition. The demon's condition is fed into a switch case to get the result.
 
 		function specialMove(demonCondition){
 			var text;
@@ -88,6 +90,8 @@
 			player.insultReady=true;
 		}
 
+		//attack affects both the player and demon objects depending on the condition of both parties. The condition of each is checked using the two arrays and a modifier applied to the damage of both player and demon. It also resets the condition of both the player and demon to normal.
+
 		function attack(playerCondition, demonCondition){
 			var conditions = ["normal", "shaken", "enraged", "dizzy", "wide-open", "pumped"];
 			var modifier = [1, -1, 2, -3, -4, 10];
@@ -113,7 +117,7 @@
 				damage = 0;
 			}
 			
-
+			//random flavor text
 			var randomAttack = ["punch", "headbutt", "throw 'bows at", "bite", "slide tackle", "head clap", "dropkick"];
 			var randomDemonAttack = ["claws", "gores", "breathes inky darkness at", "guilt-trips", "wing-buffets"];
 			if (damage > 0){
@@ -137,6 +141,7 @@
 
 		}
 
+		// insultResults applies a random condition on the demon. It can't be used two actions in a row. 
 		function insultResults(){
 			var insultResults = [["You unleash your most cutting Yo Mama jokes.<br><br> The demon retorts that he was born of ash and hatred, not woman, so your barbs have no merit.", "normal"], ["You tell the demon that you regularly eat half a pizza at company parties, making you the greater evil. <br><br>He seems perturbed.", "shaken"], ["You tell the creature that you've left worst demons in the toilet after a night of heavy drinking. He punches you.", "enraged"], ["You reenact your favorite scene from the 3 Stooges, making the demon the butt of your slapstick. He keeps falling for the eye-poke.<br><br> What a maroon!", "dizzy"],["You declare that the creature has yet to see a fraction of your true power! <br><br>It cowers in terror!", "wide-open"], ["You try to remember some of your favorite celebrity roast routines. You stutter as you try to remember the punchlines.<br><br> 'Tiny, terrible jester,' the demon points. 'I will rip you in half!'.<br><br> Uh oh. This looks bad.", "pumped"]];
 			if (player.insultReady){
@@ -150,7 +155,7 @@
 			}
 			
 		}
-
+        //rational discourse resets the condition of both the demon and player to normal without damage being exchanged. If it is used more times than demon.reasonTolerance, the demon will damage the player, the player's condition will become normal, and the demon will become enraged.
 		function rationalDiscourse(){
 			var rationalResults = ["You tell the demon that it defies the laws of physics and should not exist. <br><br>It replies that 'Physics is for nerds.' It's still there.", "'Violence solves nothing,' you advise.<br><br> 'Like how it didn't end American slavery?' the demon chortles. He's got you there.", "'How do you have a physical body as a spiritual entity?' you ask. The demon scratches his head with a thick claw.", "'From which religious and/or mythological tradition do you originate?' you ask. <br><br>'All of them,' he replies mysteriously.<br><br> You don't believe him.", "'Evil and good are relative. You're only evil from a particular cultural vantage point,' you argue.<br><br> 'Fair enough,' he concedes. 'Then you won't judge me to harshly when I devour your innards.'<br><br> You agree to respect each other's ways."];
 			if (demon.reasonEndured < demon.reasonTolerance){
@@ -165,6 +170,7 @@
 			player.insultReady=true;
 		}
 
+		//updates the health and condition variables of the objects, then calls checkEndGame() to see if the game is over.
 		function updateConditions(playerHP, playerCon, demonHP, demonCon){
 			player.health -= playerHP;
 			player.condition = playerCon;
@@ -181,6 +187,8 @@
 			
 		}
 
+		//triggers end game if either party is below 0 health
+
 		function checkEndGame(){
 			if (player.health > 0 && demon.health > 0)
 			{
@@ -190,6 +198,9 @@
 				return true;
 			}
 		}
+
+
+		//display win or lose state. Removes interactive buttons. 
 
 		function gameOver(){
 			document.getElementById('button container').innerHTML = " ";
